@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/pageicon/icon.png">
+
+
+    <title>マインクラフト座標変換ツール</title>
+        <style  id="webmakerstyle">
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+            background-image: url('images/back.png'); /* 画像ファイルのパスを指定 */
+            background-size: 400px 400px; /* 画像を画面全体に合わせる */
+            background-position: center 100px; /* X座標を100px、Y座標を200pxに設定 */
+            background-repeat: no-repeat; /* 画像を繰り返し表示しない */
+        }
+        select, input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+
+
+</head>
+<body>
+    <h1>マインクラフト座標変換ツール</h1>
+    
+    <select id="mode">
+        <option value="command">コマンドモード</option>
+        <option value="coordinate">座標モード</option>
+    </select>
+
+    <div id="commandInput">
+        <input type="text" id="command" placeholder="F3+Cで得られたコマンドを入力">
+    </div>
+
+    <div id="coordinateInput" class="hidden">
+        <input type="number" id="x" placeholder="X座標">
+        <input type="number" id="y" placeholder="Y座標">
+        <input type="number" id="z" placeholder="Z座標">
+        <select id="dimension">
+            <option value="overworld">オーバーワールド</option>
+            <option value="nether">ネザー</option>
+        </select>
+    </div>
+
+    <button id="calculate">計算</button>
+
+    <div id="result" class="hidden">
+        <p>座標: <span id="resultCoords"></span></p>
+        <p>コマンド: <span id="resultCommand"></span></p>
+        <button id="copy">コマンドをコピー</button>
+    </div>
+
+    <script>
+        const modeSelect = document.getElementById('mode');
+        const commandInput = document.getElementById('commandInput');
+        const coordinateInput = document.getElementById('coordinateInput');
+        const calculateBtn = document.getElementById('calculate');
+        const resultDiv = document.getElementById('result');
+        const resultCoords = document.getElementById('resultCoords');
+        const resultCommand = document.getElementById('resultCommand');
+        const copyBtn = document.getElementById('copy');
+
+        modeSelect.addEventListener('change', () => {
+            if (modeSelect.value === 'command') {
+                commandInput.classList.remove('hidden');
+                coordinateInput.classList.add('hidden');
+            } else {
+                commandInput.classList.add('hidden');
+                coordinateInput.classList.remove('hidden');
+            }
+        });
+
+        calculateBtn.addEventListener('click', () => {
+            let x, y, z, dimension;
+            if (modeSelect.value === 'command') {
+                const command = document.getElementById('command').value;
+                const match = command.match(/in (minecraft:)?(\w+) run tp @s (-?\d+(\.\d+)?) (-?\d+(\.\d+)?) (-?\d+(\.\d+)?)/);
+                if (match) {
+                    dimension = match[2];
+                    x = parseFloat(match[3]);
+                    y = parseFloat(match[5]);
+                    z = parseFloat(match[7]);
+                } else {
+                    showError();
+                    return;
+                }
+            } else {
+                x = parseFloat(document.getElementById('x').value);
+                y = parseFloat(document.getElementById('y').value);
+                z = parseFloat(document.getElementById('z').value);
+                dimension = document.getElementById('dimension').value;
+            }
+
+            if (isNaN(x) || isNaN(y) || isNaN(z)) {
+                showError();
+                return;
+            }
+
+            const factor = dimension === 'nether' ? 8 : 0.125;
+            const newX = x * factor;
+            const newZ = z * factor;
+
+            resultCoords.textContent = `${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
+            const newDimension = dimension === 'nether' ? 'overworld' : 'the_nether';
+            resultCommand.textContent = `/execute in minecraft:${newDimension} run tp @s ${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
+            resultDiv.classList.remove('hidden');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(resultCommand.textContent);
+            alert('コマンドをコピーしました');
+        });
+
+        function showError() {
+            resultCoords.textContent = 'err';
+            resultCommand.textContent = 'err';
+            resultDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
