@@ -104,9 +104,9 @@
                 const match = command.match(/in (minecraft:)?(\w+) run tp @s (-?\d+(\.\d+)?) (-?\d+(\.\d+)?) (-?\d+(\.\d+)?)/);
                 if (match) {
                     dimension = match[2];
-                    x = parseFloat(match[3]);
+                    x = parseFloat(match[3]) - 0.5;
                     y = parseFloat(match[5]);
-                    z = parseFloat(match[7]);
+                    z = parseFloat(match[7] - 0.5);
                 } else {
                     showError();
                     return;
