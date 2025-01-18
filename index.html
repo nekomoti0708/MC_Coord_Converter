@@ -129,11 +129,9 @@
             const newZ = Math.round(z * factor);
             const newy = Math.round(y);
 
-            const formatCoordinate = (value) => (value % 1 === 0 ? value.toString() : value.toFixed(2));
-
-            resultCoords.textContent = `${formatCoordinate(newX)} ${formatCoordinate(newY)} ${formatCoordinate(newZ)}`;
+            resultCoords.textContent = `${newX} ${newy} ${newZ}`;
             const newDimension = dimension === 'the_nether' ? 'overworld' : 'the_nether';
-            resultCommand.textContent = `/execute in minecraft:${newDimension} run tp @s ${formatCoordinate(newX)} ${formatCoordinate(newY)} ${formatCoordinate(newZ)}`;
+            resultCommand.textContent = `/execute in minecraft:${newDimension} run tp @s ${newX} ${newy} ${newZ}`;
             resultDiv.classList.remove('hidden');
         });
 
