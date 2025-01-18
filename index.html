@@ -11,6 +11,11 @@
             margin: 0 auto;
             padding: 20px;
             background-color: #f0f8ff;
+            background-image: image-set('images/back.png');
+            background-repeat: no-repeat;
+            background-position: center 120px;
+            background-size: 400px 400px;
+
         }
         select, input, button {
             width: 100%;
@@ -122,9 +127,9 @@
            
             const newX = Math.round(x * factor);
             const newZ = Math.round(z * factor);
-            const y = Math.round(y);
+            const newy = Math.round(y);
 
-            resultCoords.textContent = `${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
+            resultCoords.textContent = `${newX.toFixed(2)} ${newy.toFixed(2)} ${newZ.toFixed(2)}`;
             const newDimension = dimension === 'the_nether' ? 'overworld' : 'the_nether';
             resultCommand.textContent = `/execute in minecraft:${newDimension} run tp @s ${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
             resultDiv.classList.remove('hidden');
