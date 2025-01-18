@@ -1,24 +1,16 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="images/pageicon/icon.png">
-
-
     <title>マインクラフト座標変換ツール</title>
-        <style  id="webmakerstyle">
+    <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f0f8ff;
-            background-image: url('images/back.png'); /* 画像ファイルのパスを指定 */
-            background-size: 400px 400px; /* 画像を画面全体に合わせる */
-            background-position: center 100px; /* X座標を100px、Y座標を200pxに設定 */
-            background-repeat: no-repeat; /* 画像を繰り返し表示しない */
         }
         select, input, button {
             width: 100%;
@@ -49,8 +41,6 @@
             display: none;
         }
     </style>
-
-
 </head>
 <body>
     <h1>マインクラフト座標変換ツール</h1>
@@ -70,7 +60,7 @@
         <input type="number" id="z" placeholder="Z座標">
         <select id="dimension">
             <option value="overworld">オーバーワールド</option>
-            <option value="nether">ネザー</option>
+            <option value="the_nether">ネザー</option>
         </select>
     </div>
 
@@ -128,12 +118,12 @@
                 return;
             }
 
-            const factor = dimension === 'nether' ? 8 : 0.125;
+            const factor = dimension === 'the_nether' ? 8 : 0.125;
             const newX = x * factor;
             const newZ = z * factor;
 
             resultCoords.textContent = `${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
-            const newDimension = dimension === 'nether' ? 'overworld' : 'the_nether';
+            const newDimension = dimension === 'the_nether' ? 'overworld' : 'the_nether';
             resultCommand.textContent = `/execute in minecraft:${newDimension} run tp @s ${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
             resultDiv.classList.remove('hidden');
         });
