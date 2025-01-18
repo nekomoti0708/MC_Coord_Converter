@@ -119,8 +119,9 @@
             }
 
             const factor = dimension === 'the_nether' ? 8 : 0.125;
-            const newX = x * factor;
-            const newZ = z * factor;
+           
+            const newX = Math.round(x * factor);
+            const newZ = Math.round(z * factor);
 
             resultCoords.textContent = `${newX.toFixed(2)} ${y.toFixed(2)} ${newZ.toFixed(2)}`;
             const newDimension = dimension === 'the_nether' ? 'overworld' : 'the_nether';
